@@ -27,6 +27,7 @@ function draw() {
     fill(255, 255, 255)
     text("Area: " + city.get_area(), 50, 735);
     text("Perimeter: " + city.get_perimeter(beach), 250, 735);
+    text("Beach:", 500, 735);
 }
 
 
