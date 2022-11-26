@@ -5,6 +5,8 @@ let city;
 
 let drawing_mode;
 
+let beach = false;
+
 
 function setup() {
     createCanvas(700, 750);
@@ -24,7 +26,7 @@ function draw() {
     textSize(30);
     fill(255, 255, 255)
     text("Area: " + city.get_area(), 50, 735);
-    text("Perimeter: " + city.get_perimeter(), 250, 735);
+    text("Perimeter: " + city.get_perimeter(beach), 250, 735);
 }
 
 

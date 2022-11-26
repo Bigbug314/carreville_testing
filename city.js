@@ -67,7 +67,46 @@ class City {
         return area;
     }
 
-    get_perimeter() {
+    get_perimeter(beach) {
+        let perimeter = 0;
 
+        for (let y = 0; y < this.size; y++) {
+            for (let x = 0; x < this.size; x++) {
+                if (this.grid[y][x]) {
+                    if (x+1 < this.size) {
+                        if (this.grid[y][x+1] == false) {
+                            perimeter++;
+                        }
+                    } else {
+                        perimeter++;
+                    }
+                    if (x > 0) {
+                        if (this.grid[y][x-1] == false) {
+                            perimeter++;
+                        }
+                    } else {
+                        if (beach == false) {
+                            perimeter++;
+                        }
+                    }
+                    if (y+1 < size) {
+                        if (this.grid[y+1][x] == false) {
+                            perimeter++;
+                        }
+                    } else {
+                        perimeter++;
+                    }
+                    if (y > 0) {
+                        if (this.grid[y-1][x] == false) {
+                            perimeter++;
+                        }
+                    } else {
+                        perimeter++;
+                    }
+                }
+            }
+        }
+
+        return perimeter;
     }
 }
