@@ -1,10 +1,11 @@
 class City {
-    constructor(width, height, size, background_color, color) {
+    constructor(width, height, size, background_color, color, outline_weight) {
         this.w = width;
         this.h = height;
         this.size = size;
         this.b_color = background_color;
         this.color = color;
+        this.outline = outline_weight;
 
         this.reset();
     }
@@ -28,10 +29,10 @@ class City {
             for (let x = 0; x < this.size; x++) {
                 if (this.grid[y][x]) {
                     fill(this.color);
-                    rect(city_x + this.w * x, city_y + this.h * y, this.w, this.h);
+                    rect(city_x + this.w * x + this.outline, city_y + this.h * y + this.outline, this.w - 2*this.outline, this.h - 2*this.outline);
                 } else {
                     fill(this.b_color);
-                    rect(city_x + this.w * x, city_y + this.h * y, this.w, this.h);
+                    rect(city_x + this.w * x + this.outline, city_y + this.h * y + this.outline, this.w - 2*this.outline, this.h - 2*this.outline);
                 }
             }
         }
@@ -44,6 +45,13 @@ class City {
 
     get_square(x, y) {
         return this.grid[y][x];
+    }
+
+    world_to_grid(x, y) {
+        let grid_x = Math.floor(x / this.w);
+        let grid_y = Math.floor(y / this.h);
+
+        return [grid_x, grid_y];
     }
 
     get_area() {
