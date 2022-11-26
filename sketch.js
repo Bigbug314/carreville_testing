@@ -20,7 +20,11 @@ function draw() {
     background(80);
     city.draw(0, 0);
 
-    
+    textAlign(CORNER);
+    textSize(30);
+    fill(255, 255, 255)
+    text("Area: " + city.get_area(), 50, 735);
+    text("Perimeter: " + city.get_perimeter(), 250, 735);
 }
 
 
