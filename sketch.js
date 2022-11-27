@@ -19,6 +19,7 @@ function setup() {
     size_input.position(630, 712);
     size_input.size(60);
     size_input.style('font-size', 30+'px');
+    size_input.value("20");
 
     strokeWeight(0);
     textAlign(CORNER);
