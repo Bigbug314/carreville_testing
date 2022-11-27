@@ -1,4 +1,6 @@
-const size = 20;
+let size = 20;
+
+let size_input;
 
 const screenSize = 700;
 
@@ -12,6 +14,12 @@ let beach = false;
 
 function setup() {
     createCanvas(screenSize + 10, screenSize + 50);
+
+    size_input = createInput();
+    size_input.position(630, 712);
+    size_input.size(60);
+    size_input.style('font-size', 30+'px');
+
     strokeWeight(0);
     textAlign(CORNER);
 
@@ -77,11 +85,7 @@ function mouseDragged() {
 
 
 function keyPressed() {
-    //Reset
-    if (keyCode == 82) {
-        city.reset();
-    }
-
+    //Move around
     if (keyCode === RIGHT_ARROW) {
         city.shift_grid(1, 0);
     }
@@ -93,5 +97,12 @@ function keyPressed() {
     }
     if (keyCode === DOWN_ARROW) {
         city.shift_grid(0, 1);
+    }
+
+    //Change size
+    if (keyCode == ENTER) {
+        size = parseInt(size_input.value());
+
+        city = new City(screenSize / size, screenSize / size, size, (0, 0, 0), (255, 255, 255), 1);
     }
 }
