@@ -28,17 +28,17 @@ function draw() {
 
     textSize(30);
     fill(255, 255, 255)
-    text("Area: " + city.get_area(), 60, 735);
-    text("Perimeter: " + city.get_perimeter(beach), 260, 735);
-    text("Beach: ", 510, 735);
+    text("Area: " + city.get_area(), 30, 735);
+    text("Perimeter: " + city.get_perimeter(beach), 200, 735);
+    text("Beach: ", 440, 735);
 
     //Beach button
     if (beach) {
         fill(0, 255, 0);
-        rect(620, 710, 30, 30);
+        rect(550, 710, 30, 30);
     } else {
         fill(255, 0, 0);
-        rect(620, 710, 30, 30);
+        rect(550, 710, 30, 30);
     }
 
     //Beach
@@ -51,7 +51,7 @@ function draw() {
 
 function mouseClicked() {
     //Beach button
-    if (mouseX > 610 && mouseX < 640 && mouseY > 710 && mouseY < 740) {
+    if (mouseX > 550 && mouseX < 580 && mouseY > 710 && mouseY < 740) {
         beach = !beach;
     }
 }
@@ -73,4 +73,25 @@ function mouseDragged() {
     let grid_coord = city.world_to_grid(mouseX - 10, mouseY);
 
     city.set_square(grid_coord[0], grid_coord[1], drawing_mode);
+}
+
+
+function keyPressed() {
+    //Reset
+    if (keyCode == 82) {
+        city.reset();
+    }
+
+    if (keyCode === RIGHT_ARROW) {
+        city.shift_grid(1, 0);
+    }
+    if (keyCode === LEFT_ARROW) {
+        city.shift_grid(-1, 0);
+    }
+    if (keyCode === UP_ARROW) {
+        city.shift_grid(0, -1);
+    }
+    if (keyCode === DOWN_ARROW) {
+        city.shift_grid(0, 1);
+    }
 }

@@ -54,6 +54,43 @@ class City {
         return [grid_x, grid_y];
     }
 
+    shift_grid(x, y) {
+        if (x < 0) {
+            x = -x;
+            while (x > 0) {
+                x -= 1;
+                for (let y_index = 0; y_index < this.size; y_index++) {
+                    let buffer = this.grid[y_index].shift();
+                    this.grid[y_index].push(buffer);
+                }
+            }
+        } else {
+            while (x > 0) {
+                x -= 1;
+                for (let y_index = 0; y_index < this.size; y_index++) {
+                    let buffer = this.grid[y_index].pop();
+                    this.grid[y_index].unshift(buffer);
+                }
+            }
+        }
+        
+        if (y < 0) {
+            y = -y;
+            while (y > 0) {
+                y -= 1;
+                let buffer = this.grid.shift();
+                this.grid.push(buffer);
+            }
+        } else {
+            while (y > 0) {
+                y -= 1;
+                let buffer = this.grid.pop();
+                this.grid.unshift(buffer);
+            }
+        }
+        
+    }
+
     get_area() {
         let area = 0;
         for (let y = 0; y < this.size; y++) {
