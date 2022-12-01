@@ -12,6 +12,14 @@ let drawing_mode;
 let beach = false;
 
 
+let selection = undefined;
+
+let selectionMode = false;
+
+let selectionXInverted = false;
+let selectionYInverted = false;
+
+
 function setup() {
     createCanvas(screenSize + 10, screenSize + 50);
 
@@ -33,7 +41,14 @@ function setup() {
 
 function draw() {
     background(80);
+
     city.draw(10, 0);
+
+    //Draw selection
+    if (selection != undefined) {
+        fill(255, 0, 0, 128);
+        rect(selection[0][0] * city.w + 10, selection[0][1] * city.h, (selection[1][0] - selection[0][0] + 1) * city.w, (selection[1][1] - selection[0][1] + 1) * city.h);
+    }
 
     textSize(30);
     fill(255, 255, 255)
@@ -55,6 +70,38 @@ function draw() {
         fill(220, 220, 0);
         rect(0, 0, 10, 700);
     }
+
+
+    //Selection
+    if (selectionMode) {
+        let coords = city.world_to_grid(mouseX, mouseY);
+        if (selectionXInverted) {
+            selection[0][0] = coords[0];
+        } else {
+            selection[1][0] = coords[0];
+        }
+        if (selectionYInverted) {
+            selection[0][1] = coords[1];
+        } else {
+            selection[1][1] = coords[1];
+        }
+    }
+
+    //Make selection valid
+    if (selection != undefined) {
+        if (selection[0][0] > selection[1][0]) {
+            let buffer = selection.slice(0)[0][0];
+            selection[0][0] = selection.slice(0)[1][0];
+            selection[1][0] = buffer;
+            selectionXInverted = !selectionXInverted;
+        }
+        if (selection[0][1] > selection[1][1]) {
+            let buffer = selection.slice(0)[0][1];
+            selection[0][1] = selection.slice(0)[1][1];
+            selection[1][1] = buffer;
+            selectionYInverted = !selectionYInverted
+        }
+    }
 }
 
 
@@ -67,15 +114,19 @@ function mouseClicked() {
 
 
 function mousePressed() {
-    let grid_coord = city.world_to_grid(mouseX - 10, mouseY);
-
-    if (city.get_square(grid_coord[0], grid_coord[1])) {
-        drawing_mode = false;
+    if (selectionMode) {
+        selectionMode = false;
     } else {
-        drawing_mode = true;
-    }
+        let grid_coord = city.world_to_grid(mouseX - 10, mouseY);
 
-    city.set_square(grid_coord[0], grid_coord[1], drawing_mode);
+        if (city.get_square(grid_coord[0], grid_coord[1])) {
+            drawing_mode = false;
+        } else {
+            drawing_mode = true;
+        }
+
+        city.set_square(grid_coord[0], grid_coord[1], drawing_mode);
+    }
 }
 
 function mouseDragged() {
@@ -86,6 +137,7 @@ function mouseDragged() {
 
 
 function keyPressed() {
+    console.log(keyCode);
     //Move around
     if (keyCode === RIGHT_ARROW) {
         city.shift_grid(1, 0);
@@ -105,5 +157,74 @@ function keyPressed() {
         size = parseInt(size_input.value());
 
         city = new City(screenSize / size, screenSize / size, size, (0, 0, 0), (255, 255, 255), 1);
+    }
+
+
+    //True
+    if (keyCode == 84) {
+        if (selection == undefined) {
+            for (let y = 0; y < city.size; y++) {
+                for (let x = 0; x < city.size; x++) {
+                    city.grid[y][x] = true;
+                }
+            }
+        } else {
+            for (let y = selection[0][1]; y <= selection[1][1]; y++) {
+                for (let x = selection[0][0]; x <= selection[1][0]; x++) {
+                    city.grid[y][x] = true;
+                }
+            }
+        }
+    }
+
+
+    //False
+    if (keyCode == 70) {
+        if (selection == undefined) {
+            for (let y = 0; y < city.size; y++) {
+                for (let x = 0; x < city.size; x++) {
+                    city.grid[y][x] = false;
+                }
+            }
+        } else {
+            for (let y = selection[0][1]; y <= selection[1][1]; y++) {
+                for (let x = selection[0][0]; x <= selection[1][0]; x++) {
+                    city.grid[y][x] = false;
+                }
+            }
+        }
+    }
+
+
+    //Invert
+    if (keyCode == 73) {
+        if (selection == undefined) {
+            for (let y = 0; y < city.size; y++) {
+                for (let x = 0; x < city.size; x++) {
+                    city.grid[y][x] = !city.grid[y][x];
+                }
+            }
+        } else {
+            for (let y = selection[0][1]; y <= selection[1][1]; y++) {
+                for (let x = selection[0][0]; x <= selection[1][0]; x++) {
+                    city.grid[y][x] = !city.grid[y][x];
+                }
+            }
+        }
+    }
+
+
+    //Remove selection
+    if (keyCode == 27) {
+        selection = undefined;
+        selectionMode = false;
+    }
+
+
+    //Selection
+    if (keyCode == 83) {
+        selectionMode = true;
+        let coords = city.world_to_grid(mouseX, mouseY);
+        selection = [coords.slice(0), coords.slice(0)];
     }
 }
